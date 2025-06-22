@@ -1,54 +1,37 @@
 "use client";
-import Image from "next/image";
-import * as React from "react";
+import { useState } from "react";
 
-interface ToggleCardProps {
-  backgroundImageUrl: string;
-  activeToggleUrl: string;
-  inactiveToggleUrl: string;
-  iconUrl: string;
-}
+export default function ToggleCard() {
+  const [checked, setChecked] = useState(false);
 
-export function ToggleCard({
-  backgroundImageUrl,
-  activeToggleUrl,
-  inactiveToggleUrl,
-  iconUrl,
-}: ToggleCardProps) {
   return (
-    <article className="flex overflow-hidden relative flex-col justify-center items-center w-full aspect-[1.669] min-h-[157px]">
-      <Image
-        src={backgroundImageUrl}
-        className="object-cover absolute inset-0 size-full"
-        alt=""
-        width={0}
-        height={0}
-      />
-      <div className="flex overflow-hidden relative gap-1 items-center p-2 border border-solid bg-black bg-opacity-10 border-slate-600 border-opacity-50 rounded-[11802px]">
-        <button className="flex relative flex-col gap-3.5 justify-center items-center self-stretch px-3.5 py-4 my-auto w-14 shadow-lg aspect-square min-h-14 rounded-[11803px]">
-          <Image
-            src={activeToggleUrl}
-            className="object-cover absolute inset-0 size-full"
-            alt=""
-            width={0}
-            height={0}
-          />
-          <Image
-            src={iconUrl}
-            className="object-contain self-stretch my-auto w-6 aspect-square"
-            alt=""
-            width={0}
-            height={0}
-          />
-        </button>
-        <Image
-          src={inactiveToggleUrl}
-          className="object-contain shrink-0 gap-3.5 self-stretch my-auto w-14 aspect-square min-h-14 rounded-[11803px] shadow-[14px_0px_10px_rgba(0,0,0,0.25)]"
-          alt=""
-          width={0}
-          height={0}
+    <div className="flex items-center justify-center h-[25vh] bg-[#2E3258] rounded-2xl">
+      <div className="relative w-[120px] h-[60px]">
+        <input
+          type="checkbox"
+          id="toggle"
+          className="hidden"
+          checked={checked}
+          onChange={() => setChecked(!checked)}
         />
+        <label
+          htmlFor="toggle"
+          className={`block w-full h-full rounded-full cursor-pointer transition-all duration-300 
+            bg-[#1e2040] shadow-[inset_0_0_6px_rgba(255,255,255,0.1),_0_8px_20px_rgba(0,0,0,0.4)]`}
+        >
+          <span
+            className={`absolute top-1/2 transform -translate-y-1/2 w-[48px] h-[48px] rounded-full flex items-center justify-center text-white text-xl
+              transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.3)]
+              ${
+                checked
+                  ? "left-[66px] bg-gradient-to-br from-orange-400 to-red-400"
+                  : "left-[8px] bg-gradient-to-br from-orange-300 to-yellow-400"
+              }`}
+          >
+            ✨
+          </span>
+        </label>
       </div>
-    </article>
+    </div>
   );
 }

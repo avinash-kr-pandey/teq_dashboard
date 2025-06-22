@@ -11,7 +11,8 @@ export function GenerateToggleCard() {
 
   return (
     <article className="flex overflow-hidden relative flex-col justify-center px-8 py-14 mt-7 w-full text-xl font-medium leading-snug text-white whitespace-nowrap aspect-[1.598] min-h-[180px] max-md:px-5 rounded-3xl shadow-xl">
-      <div className="absolute inset-0 size-full bg-gradient-to-br from-blue-950 via-purple-900 to-gray-950 opacity-90 rounded-3xl"></div>
+      {/* Solid background instead of gradient */}
+      <div className="absolute inset-0 size-full bg-[#191934] opacity-100 rounded-3xl"></div>
 
       <div className="relative flex overflow-hidden p-2 w-full bg-slate-900 bg-opacity-50 min-h-[76px] rounded-full shadow-inner shadow-black/30">
         {/* Sliding background with inset spacing */}
@@ -45,7 +46,7 @@ export function GenerateToggleCard() {
           onClick={() => setActiveTab("explore")}
           aria-pressed={activeTab === "explore"}
         >
-          <span className="relative my-auto">Explore</span>
+        
         </button>
       </div>
     </article>
