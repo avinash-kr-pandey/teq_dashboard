@@ -7,9 +7,6 @@ import { PromptServiceCard } from "./components/dashboard/PromptServiceCard";
 import TemplateAiCard from "./components/dashboard/TemplateAiCard";
 import ToggleCard from "./components/dashboard/ToggleCard";
 import PromptsStatsCard from "./components/dashboard/PromptsStatsCard";
-import Roadmap from "./components/roadmap/roadmap";
-import Slider from "./components/slider/slider";
-import Carousel from "./components/carousel/carousel";
 
 export function TemplateExample() {
   return (
@@ -39,23 +36,23 @@ export function TemplateExample() {
           </div>
         </aside>
       </div>
-      <section>
+      {/* <section>
         <div className="w-full">
           <Roadmap />
         </div>
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         <div className=" w-full">
           <Slider />
         </div>
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         <div className=" w-full">
           <Carousel />
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

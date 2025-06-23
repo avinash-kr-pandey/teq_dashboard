@@ -1,9 +1,13 @@
 "use client";
 import Image from "next/image";
 import * as React from "react";
+import TopUsersCardModal from "../Modals/TopUsersCardModal";
+import CarouselModal from "../Modals/CarouselModal";
 
 export function TemplateAiCard() {
   const [imageError, setImageError] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isisModalOpenCarousel, setIsModalOpenCarousel] = React.useState(false)
 
   return (
     <section className="w-full max-w-[768px] mx-auto text-white font-sans p-4">
@@ -61,7 +65,10 @@ export function TemplateAiCard() {
 
       {/* Bottom Cards - responsive and stacked */}
       <div className="flex flex-row md-mt-0 sm:flex-row justify-center z-10 relative -mt-35 sm:-mt-60 gap-4 sm:gap-5 px-2">
-        <div className="flex-1 rounded-2xl p-4 min-w-[180px] max-w-[280px] mx-auto">
+        <div
+          className="flex-1 rounded-2xl p-4 min-w-[180px] max-w-[280px] mx-auto cursor-pointer"
+          onClick={() => setIsModalOpenCarousel(true)}
+        >
           <Image
             src="/card1.png"
             alt="Card 1"
@@ -70,7 +77,10 @@ export function TemplateAiCard() {
             className="w-full h-auto object-contain"
           />
         </div>
-        <div className="flex-1 rounded-2xl p-4 min-w-[180px] max-w-[280px] mx-auto">
+        <div
+          className="flex-1 rounded-2xl p-4 min-w-[180px] max-w-[280px] mx-auto cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Image
             src="/card2.png"
             alt="Card 2"
@@ -80,6 +90,16 @@ export function TemplateAiCard() {
           />
         </div>
       </div>
+
+      <TopUsersCardModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      <CarouselModal
+        isOpen={isisModalOpenCarousel}
+        onClose={() => setIsModalOpenCarousel(false)}
+      />
     </section>
   );
 }

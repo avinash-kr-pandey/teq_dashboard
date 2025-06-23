@@ -113,8 +113,12 @@ const Card = ({
   );
 };
 
+type CarouselModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
 
-const Carousel = () => {
+const CarouselModal = ({ isOpen, onClose }: CarouselModalProps) => {
   const [centerIndex, setCenterIndex] = useState<number>(1);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [animate, setAnimate] = useState(false);
@@ -135,7 +139,7 @@ const Carousel = () => {
 
   const triggerAnimate = () => {
     setAnimate(true);
-    setTimeout(() => setAnimate(false), 400); // match animation duration
+    setTimeout(() => setAnimate(false), 400);
   };
 
   const moveLeft = () => {
@@ -148,70 +152,96 @@ const Carousel = () => {
     setCenterIndex(mod(centerIndex + 1, cards.length));
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="w-full max-w-5xl mx-auto min-h-[80vh] mt-12 flex justify-center items-center relative overflow-visible px-4">
-      <div className="absolute inset-0 bg-black/25 backdrop-blur-sm rounded-xl pointer-events-none z-0" />
+    <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/40 backdrop-blur-md bg-opacity-50 px-4">
+      <div className="relative rounded-xl w-full max-w-6xl p-4 shadow-lg">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-black bg-white p-2 rounded-full shadow hover:bg-gray-200 z-50"
+          aria-label="Close"
+        >
+          ✖️
+        </button>
 
-      <div className="relative w-full h-[300px] flex justify-center items-center z-10 overflow-visible">
-        {isSmallScreen ? (
-          <Card
-            card={cards[centerIndex]}
-            isCenter={true}
-            position="center"
-            hideIconAndBg
-            animate={animate}
-          />
-        ) : (
-          <>
-            <Card card={cards[leftIndex]} isCenter={false} position="left" />
-            <Card
-              card={cards[centerIndex]}
-              isCenter={true}
-              position="center"
-              animate={animate}
-            />
-            <Card card={cards[rightIndex]} isCenter={false} position="right" />
-          </>
-        )}
+        <div className="w-full max-w-5xl mx-auto min-h-[60vh] flex justify-center items-center relative overflow-visible">
+          <div className="absolute inset-0 bg-black/25 backdrop-blur-sm rounded-xl pointer-events-none z-0" />
+
+          <div className="relative w-full h-[300px] flex justify-center items-center z-10 overflow-visible">
+            {isSmallScreen ? (
+              <Card
+                card={cards[centerIndex]}
+                isCenter={true}
+                position="center"
+                hideIconAndBg
+                animate={animate}
+              />
+            ) : (
+              <>
+                <Card
+                  card={cards[leftIndex]}
+                  isCenter={false}
+                  position="left"
+                />
+                <Card
+                  card={cards[centerIndex]}
+                  isCenter={true}
+                  position="center"
+                  animate={animate}
+                />
+                <Card
+                  card={cards[rightIndex]}
+                  isCenter={false}
+                  position="right"
+                />
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={moveLeft}
+            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30"
+            aria-label="Previous"
+          >
+            <svg
+              className="h-8 w-8"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <button
+            onClick={moveRight}
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30"
+            aria-label="Next"
+          >
+            <svg
+              className="h-8 w-8"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-
-      <button
-        onClick={moveLeft}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30 focus:outline-none"
-        aria-label="Previous"
-      >
-        <svg
-          className="h-8 w-8 cursor-pointer"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
-
-      <button
-        onClick={moveRight}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30 focus:outline-none"
-        aria-label="Next"
-      >
-        <svg
-          className="h-8 w-8 cursor-pointer"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
     </div>
   );
 };
 
-export default Carousel;
+export default CarouselModal;
