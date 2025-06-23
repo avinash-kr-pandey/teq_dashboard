@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        "spin-slow": "spin 5s linear infinite", // slower
+        "spin-slower": "spin 10s linear infinite", // even slower
+        "spin-fast": "spin 1s linear infinite", // faster
+      },
       colors: {
         purpleGlow: "#6633EE",
         darkBg: "#0B0C2A",

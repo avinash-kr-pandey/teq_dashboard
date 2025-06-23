@@ -37,13 +37,13 @@ function TimelineCard({
       initial="hidden"
       animate={controls}
       variants={variants}
-      className="bg-gradient-to-r from-[#A187FF] to-[#6633EE] rounded-2xl p-6 w-[430px] text-white shadow-lg relative overflow-hidden"
+      className="bg-gradient-to-r from-[#A187FF] to-[#6633EE] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden
+                 w-full max-w-[90vw] sm:w-[430px] sm:h-[220px]"
     >
       <h2
-        className=""
         style={{
           color: "#fff",
-          fontSize: "26px",
+          fontSize: "24px",
           fontFamily: "'Plus Jakarta Sans', sans-serif",
         }}
       >
@@ -71,6 +71,7 @@ function TimelineCard({
       </p>
 
       {/* Background image positioned absolutely at the end of card */}
+      {/* Background image positioned absolutely at the end of card */}
       <div
         className="absolute bottom-4 right-0 w-20 h-10 bg-no-repeat bg-contain"
         style={{
@@ -79,11 +80,9 @@ function TimelineCard({
         }}
       />
 
-      {/* Foreground icon centered on background image */}
-      <div className="mt-4 flex justify-end relative z-10">
-        <div className="w-13 h-7 ">
-          <Image src="/icon.png" alt="" width={30} height={30} />
-        </div>
+      {/* Icon absolutely positioned exactly over Union image */}
+      <div className="absolute bottom-[22px] right-[46px] w-7 h-7 z-10">
+        <Image src="/icon.png" alt="" width={30} height={30} />
       </div>
     </motion.div>
   );
@@ -126,13 +125,13 @@ const timelineData: TimelineCardProps[] = [
 // Roadmap Component
 export default function Roadmap() {
   return (
-    <section className="h-screen w-full overflow-hidden relative">
+    <section className="min-h-screen w-full overflow-hidden relative">
       {/* Scrollable timeline section */}
-      <div className="h-screen overflow-y-scroll scroll-smooth hide-scrollbar">
+      <div className="min-h-screen overflow-y-scroll scroll-smooth hide-scrollbar">
         <div className="min-h-[200vh] w-full flex flex-col items-center justify-center py-20 relative">
-          {/* Blurred Background */}
+          {/* Responsive Blurred Background - Hidden on small screens */}
           <div
-            className="fixed inset-0 z-0"
+            className="hidden sm:block fixed inset-0 z-0"
             style={{
               backgroundImage: "url('/Spherebg.png')",
               backgroundSize: "700px",
@@ -143,29 +142,37 @@ export default function Roadmap() {
             }}
           />
 
-          {/* Vertical Timeline Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-white/10 transform -translate-x-1/2 z-10" />
+          {/* Vertical Timeline Line - Hidden on small screens */}
+          <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-white/10 transform -translate-x-1/2 z-10" />
 
           {/* Timeline Cards */}
           <div className="relative z-20 flex flex-col space-y-24 w-full max-w-5xl px-4">
-            {timelineData.map((card, index) => {
+            {timelineData?.map((card, index) => {
               const isLeft = index % 2 !== 0;
+
               return (
                 <div
                   key={index}
-                  className={`relative flex ${
-                    isLeft ? "justify-start" : "justify-end"
-                  } items-center w-full`}
+                  className={`
+                    relative flex justify-center items-center w-full
+                    sm:${isLeft ? "justify-start" : "justify-end"}
+                  `}
                   style={{ minHeight: "160px" }}
                 >
-                  {/* Center Dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 bg-[#A187FF] rounded-full shadow-lg w-4 h-4 z-20" />
+                  {/* Center Dot - Visible only on sm and above */}
+                  <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 bg-[#A187FF] rounded-full shadow-lg w-4 h-4 z-20" />
 
                   {/* Card Placement */}
                   <div
-                    className={`${
-                      isLeft ? "ml-[calc(50%+16px)]" : "mr-[calc(50%+16px)]"
-                    }`}
+                    className={`
+                      w-full max-w-[90vw]
+                      sm:w-auto
+                      ${
+                        isLeft
+                          ? "sm:ml-[calc(50%+16px)]"
+                          : "sm:mr-[calc(50%+16px)]"
+                      }
+                    `}
                   >
                     <TimelineCard
                       {...card}

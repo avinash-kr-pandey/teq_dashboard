@@ -35,4 +35,38 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
+/* globals.css */
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-slow {
+  animation: rotate360 8s linear infinite; /* Adjust the 6s to control speed */
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: pop 0.4s ease-in-out;
+}
+
+
 

@@ -40,19 +40,19 @@ export function TemplateExample() {
         </aside>
       </div>
       <section>
-        <div className="ml-5 w-full">
+        <div className="w-full">
           <Roadmap />
         </div>
       </section>
 
       <section>
-        <div className="ml-5 w-full">
+        <div className=" w-full">
           <Slider />
         </div>
       </section>
 
       <section>
-        <div className="ml-5 w-full">
+        <div className=" w-full">
           <Carousel />
         </div>
       </section>

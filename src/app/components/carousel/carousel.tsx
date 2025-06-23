@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type CardType = {
   id: number;
@@ -51,53 +51,62 @@ type CardProps = {
   card: CardType;
   isCenter: boolean;
   position: "left" | "center" | "right";
+  hideIconAndBg?: boolean;
+  animate?: boolean;
 };
 
-const Card = ({ card, isCenter, position }: CardProps) => {
-  const baseClasses = `absolute w-90 h-64 rounded-2xl p-0  transition-all duration-500 ease-in-out
+const Card = ({
+  card,
+  isCenter,
+  position,
+  hideIconAndBg,
+  animate = false,
+}: CardProps) => {
+  const animationClass = animate ? "animate-pop" : "";
+
+  const baseClasses = `
+    rounded-2xl p-0 transition-all duration-500 ease-in-out
     flex flex-col justify-center items-start text-left select-none
     ${
       isCenter
-        ? "z-20 scale-110 shadow-2xl bg-gradient-to-br from-[#7C4DFF] to-[#9575CD] text-white"
+        ? `z-20 scale-110 shadow-2xl bg-gradient-to-br from-[#7C4DFF] to-[#9575CD] text-white ${animationClass}`
         : "z-10 scale-90 bg-gradient-to-br from-[#7C4DFF] to-[#9575CD] text-white blur-sm opacity-70"
     }
   `;
 
   const positionClass =
     position === "left"
-      ? "-translate-x-[110%]"
+      ? "-translate-x-[110%] sm:absolute sm:w-[280px] w-[80vw] max-w-[280px] h-64"
       : position === "right"
-      ? "translate-x-[110%]"
-      : "translate-x-0";
+      ? "translate-x-[110%] sm:absolute sm:w-[280px] w-[80vw] max-w-[280px] h-64"
+      : "translate-x-0 sm:absolute sm:w-[320px] w-[90vw] max-w-[320px] h-72";
+
+  const responsiveClasses = hideIconAndBg
+    ? "relative w-full h-72 translate-x-0 scale-100 blur-0 opacity-100"
+    : "";
 
   return (
-    <div className={`${baseClasses} ${positionClass}`}>
-      {/* Icon Badge */}
-      <div className="relative w-[9vw] h-full top-0">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-left bg-cover bg-no-repeat opacity-90 "
-          style={{
-            backgroundImage: "url('/UnionSecond.png')",
-            backgroundPosition: "left center",
-          }}
-        ></div>
-
-        {/* Icon on top, positioned at end of image */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 text-2xl bg-[#E27F5A] rounded-full shadow-lg mr-2">
-          {card.icon}
+    <div className={`${baseClasses} ${positionClass} ${responsiveClasses}`}>
+      {!hideIconAndBg && (
+        <div className="relative w-[8vw] h-[8vh] top-0">
+          <div
+            className="absolute inset-0 bg-left bg-cover bg-no-repeat opacity-80"
+            style={{
+              backgroundImage: "url('/UnionSecond.png')",
+              backgroundPosition: "left center",
+            }}
+          ></div>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 text-2xl bg-[#E27F5A] rounded-full shadow-lg mr-2">
+            {card.icon}
+          </div>
         </div>
-      </div>
-
-      <div className="p-8">
-        {/* Title */}
+      )}
+      <div className={`p-8 ${hideIconAndBg ? "pl-6" : ""}`}>
         <h2 className="text-2xl font-semibold mt-8 leading-snug z-10">
           {card.title}
           <br />
           <span className="block">Prompts templates</span>
         </h2>
-
-        {/* Description */}
         <p className="mt-2 text-sm text-white/80 z-10">{card.description}</p>
       </div>
     </div>
@@ -106,28 +115,65 @@ const Card = ({ card, isCenter, position }: CardProps) => {
 
 const Carousel = () => {
   const [centerIndex, setCenterIndex] = useState<number>(1);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsSmallScreen(window.innerWidth < 640);
+    };
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
 
   const mod = (n: number, m: number) => ((n % m) + m) % m;
 
   const leftIndex = mod(centerIndex - 1, cards.length);
   const rightIndex = mod(centerIndex + 1, cards.length);
 
-  const moveLeft = () => setCenterIndex(mod(centerIndex - 1, cards.length));
-  const moveRight = () => setCenterIndex(mod(centerIndex + 1, cards.length));
+  const triggerAnimate = () => {
+    setAnimate(true);
+    setTimeout(() => setAnimate(false), 400); // match animation duration
+  };
+
+  const moveLeft = () => {
+    triggerAnimate();
+    setCenterIndex(mod(centerIndex - 1, cards.length));
+  };
+
+  const moveRight = () => {
+    triggerAnimate();
+    setCenterIndex(mod(centerIndex + 1, cards.length));
+  };
 
   return (
-    <div className="w-full max-w-5xl mx-auto min-h-[80vh] mt-12 flex justify-center items-center relative overflow-visible">
-      {/* Background Blur Overlay */}
-      <div className="absolute inset-0  bg-black/25 backdrop-blur-sm rounded-xl pointer-events-none z-0" />
+    <div className="w-full max-w-5xl mx-auto min-h-[80vh] mt-12 flex justify-center items-center relative overflow-visible px-4">
+      <div className="absolute inset-0 bg-black/25 backdrop-blur-sm rounded-xl pointer-events-none z-0" />
 
-      {/* Cards */}
       <div className="relative w-full h-[300px] flex justify-center items-center z-10 overflow-visible">
-        <Card card={cards[leftIndex]} isCenter={false} position="left" />
-        <Card card={cards[centerIndex]} isCenter={true} position="center" />
-        <Card card={cards[rightIndex]} isCenter={false} position="right" />
+        {isSmallScreen ? (
+          <Card
+            card={cards[centerIndex]}
+            isCenter={true}
+            position="center"
+            hideIconAndBg
+            animate={animate}
+          />
+        ) : (
+          <>
+            <Card card={cards[leftIndex]} isCenter={false} position="left" />
+            <Card
+              card={cards[centerIndex]}
+              isCenter={true}
+              position="center"
+              animate={animate}
+            />
+            <Card card={cards[rightIndex]} isCenter={false} position="right" />
+          </>
+        )}
       </div>
 
-      {/* Left Arrow */}
       <button
         onClick={moveLeft}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30 focus:outline-none"
@@ -148,7 +194,6 @@ const Carousel = () => {
         </svg>
       </button>
 
-      {/* Right Arrow */}
       <button
         onClick={moveRight}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full text-white z-30 focus:outline-none"

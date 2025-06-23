@@ -53,8 +53,8 @@ const Slider = () => {
   const prevSlide = () =>
     setCurrentIndex((prev) => (prev === 0 ? sliderItems.length - 1 : prev - 1));
 
-  const cardWidth = 380;
-  const cardHeight = 520;
+  // const cardWidth = 380;
+  // const cardHeight = 520;
 
   return (
     <div className="relative w-full max-w-4xl mx-auto min-h-[80vh] mt-12">
@@ -85,10 +85,9 @@ const Slider = () => {
             return (
               <div
                 key={item.id}
-                className="absolute rounded-xl overflow-hidden cursor-pointer bg-[#9A72FD]"
+                className={`absolute rounded-xl overflow-hidden cursor-pointer bg-[#9A72FD]
+    w-[250px] h-[350px] sm:w-[300px] sm:h-[440px] md:w-[380px] md:h-[520px]`}
                 style={{
-                  width: `${cardWidth}px`,
-                  height: `${cardHeight}px`,
                   top: "50%",
                   left: "50%",
                   transform: `translate(-50%, -50%) scale(${scale}) rotateZ(${
