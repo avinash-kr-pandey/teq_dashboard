@@ -8,7 +8,7 @@ export function TemplateAiCard() {
   return (
     <section className="w-full max-w-[768px] mx-auto text-white font-sans p-4">
       {/* Top Gradient Header */}
-      <div className="relative min-h-[40vh] sm:min-h-[45vh] bg-gradient-to-b from-[#9B6BFF] to-[#3D2D75] rounded-[2rem] pt-10 sm:pt-14 pb-32 sm:pb-40 text-center overflow-hidden z-10">
+      <div className="relative min-h-[40vh] sm:min-h-[45vh] bg-gradient-to-b from-[#9972ed] to-[#7c5ee9] rounded-[2rem] pt-10 sm:pt-14 pb-32 sm:pb-40 text-center overflow-hidden z-10">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold z-10 relative">
           Template Ai
         </h1>

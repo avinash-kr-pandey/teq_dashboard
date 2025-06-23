@@ -17,7 +17,8 @@ export default function ToggleCard() {
         <label
           htmlFor="toggle"
           className={`block w-full h-full rounded-full cursor-pointer transition-all duration-300 
-            bg-[#1e2040] shadow-[inset_0_0_6px_rgba(255,255,255,0.1),_0_8px_20px_rgba(0,0,0,0.4)]`}
+    bg-[#1e2040] shadow-[inset_0_0_6px_rgba(255,255,255,0.1),_0_8px_20px_rgba(0,0,0,0.4)]
+    relative z-10`} // <-- add relative and z-index
         >
           <span
             className={`absolute top-1/2 transform -translate-y-1/2 w-[48px] h-[48px] rounded-full flex items-center justify-center text-white text-xl
