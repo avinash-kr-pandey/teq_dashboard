@@ -1,44 +1,52 @@
 "use client";
-import React from "react";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
-// TimelineCardProps Type
 type TimelineCardProps = {
   title: string;
   description: string;
   date: string;
   direction?: "left" | "right";
+  isCenter?: boolean;
 };
 
-// TimelineCard Component
 function TimelineCard({
   title,
   description,
   date,
   direction = "right",
+  isCenter = false,
 }: TimelineCardProps) {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-
-  React.useEffect(() => {
-    if (inView) controls.start("visible");
-  }, [controls, inView]);
-
-  const variants = {
-    hidden: { opacity: 0, x: direction === "left" ? -50 : 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-  };
+  const scale = isCenter ? 1.05 : 1;
+  const brightness = isCenter ? 1 : 0.8;
+  const shadow = isCenter
+    ? "0 10px 30px rgba(101, 46, 255, 0.6)"
+    : "0 4px 15px rgba(0,0,0,0.2)";
 
   return (
     <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={variants}
-      className="bg-gradient-to-r from-[#A187FF] to-[#6633EE] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden
-                 w-full max-w-[90vw] sm:w-[430px] sm:h-[220px]"
+      className={`
+        bg-gradient-to-r from-[#A187FF] to-[#6633EE] rounded-2xl p-6 text-white relative overflow-hidden
+        w-full max-w-[90vw] sm:w-[430px] 
+        sm:h-[33.33vh] flex flex-col justify-between
+        transition-transform duration-300
+        ${
+          // On medium and up, margin-left for left cards, margin-right for right cards
+          direction === "left"
+            ? "sm:ml-[calc(50%+50px)]"
+            : "sm:mr-[calc(50%+40px)]"
+        }
+        // On small screens, center all cards
+        max-sm:mx-auto max-sm:sm:w-full
+      `}
+      style={{
+        scale,
+        filter: `brightness(${brightness})`,
+        boxShadow: shadow,
+        zIndex: isCenter ? 30 : 10,
+      }}
     >
       <h2
         style={{
@@ -69,9 +77,6 @@ function TimelineCard({
       >
         {date}
       </p>
-
-      {/* Background image positioned absolutely at the end of card */}
-      {/* Background image positioned absolutely at the end of card */}
       <div
         className="absolute bottom-4 right-0 w-20 h-10 bg-no-repeat bg-contain"
         style={{
@@ -79,8 +84,6 @@ function TimelineCard({
           zIndex: 0,
         }}
       />
-
-      {/* Icon absolutely positioned exactly over Union image */}
       <div className="absolute bottom-[22px] right-[46px] w-7 h-7 z-10">
         <Image src="/icon.png" alt="" width={30} height={30} />
       </div>
@@ -88,7 +91,6 @@ function TimelineCard({
   );
 }
 
-// Timeline Data
 const timelineData: TimelineCardProps[] = [
   {
     title: "Your AI Prompt Companion",
@@ -122,67 +124,91 @@ const timelineData: TimelineCardProps[] = [
   },
 ];
 
-// Roadmap Component
 export default function Roadmap() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [centerIndex, setCenterIndex] = useState(0);
+  const [cardHeightPx, setCardHeightPx] = useState(0);
+
+  // On mount and resize, calculate card height
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const handleResize = () => {
+      if (!containerRef.current) return;
+      const cardElement = containerRef.current.querySelector(
+        ".timeline-card"
+      ) as HTMLElement;
+      if (cardElement) {
+        setCardHeightPx(cardElement.clientHeight);
+      }
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // On scroll, calculate which card is center
+  const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!cardHeightPx) return;
+    const scrollTop = e.currentTarget.scrollTop;
+    const centerPosition = scrollTop + cardHeightPx * 1.5;
+    let index = Math.floor(centerPosition / cardHeightPx);
+    if (index < 0) index = 0;
+    if (index >= timelineData.length) index = timelineData.length - 1;
+    setCenterIndex(index);
+  };
+
   return (
-    <section className="min-h-screen w-full overflow-hidden relative">
-      {/* Scrollable timeline section */}
-      <div className="min-h-screen overflow-y-scroll scroll-smooth hide-scrollbar">
-        <div className="min-h-[200vh] w-full flex flex-col items-center justify-center py-20 relative">
-          {/* Responsive Blurred Background - Hidden on small screens */}
+    <section className="min-h-screen w-full overflow-hidden relative bg-[#1a172e] py-10">
+      <div
+        ref={containerRef}
+        className="w-full overflow-y-scroll hide-scrollbar"
+        style={{
+          height: "100vh",
+          scrollSnapType: "y proximity",
+          scrollBehavior: "smooth",
+        }}
+        onScroll={onScroll}
+      >
+        <div
+          className="flex flex-col items-center justify-start relative w-full max-w-5xl mx-auto"
+          style={{
+            height: `${timelineData.length * 33.33}vh`,
+          }}
+        >
+          {/* Center vertical timeline line, hidden on small */}
           <div
-            className="hidden sm:block fixed inset-0 z-0"
-            style={{
-              backgroundImage: "url('/Spherebg.png')",
-              backgroundSize: "700px",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              filter: "blur(8px)",
-              transform: "scale(1.1)",
-            }}
+            className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-white/10 transform -translate-x-1/2 z-10 pointer-events-none"
+            aria-hidden="true"
           />
 
-          {/* Vertical Timeline Line - Hidden on small screens */}
-          <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-white/10 transform -translate-x-1/2 z-10" />
+          {timelineData.map((card, index) => {
+            const isLeft = index % 2 !== 0;
+            const isCenter = index === centerIndex;
 
-          {/* Timeline Cards */}
-          <div className="relative z-20 flex flex-col space-y-24 w-full max-w-5xl px-4">
-            {timelineData?.map((card, index) => {
-              const isLeft = index % 2 !== 0;
-
-              return (
-                <div
-                  key={index}
-                  className={`
-                    relative flex justify-center items-center w-full
-                    sm:${isLeft ? "justify-start" : "justify-end"}
-                  `}
-                  style={{ minHeight: "160px" }}
-                >
-                  {/* Center Dot - Visible only on sm and above */}
-                  <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 bg-[#A187FF] rounded-full shadow-lg w-4 h-4 z-20" />
-
-                  {/* Card Placement */}
-                  <div
-                    className={`
-                      w-full max-w-[90vw]
-                      sm:w-auto
-                      ${
-                        isLeft
-                          ? "sm:ml-[calc(50%+16px)]"
-                          : "sm:mr-[calc(50%+16px)]"
-                      }
-                    `}
-                  >
-                    <TimelineCard
-                      {...card}
-                      direction={isLeft ? "left" : "right"}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+            return (
+              <div
+                key={index}
+                className={`timeline-card relative flex items-center w-full
+                  max-sm:justify-center
+                  sm:${isLeft ? "justify-start" : "justify-end"}
+                `}
+                style={{
+                  height: "33.33vh",
+                  scrollSnapAlign: "start",
+                }}
+              >
+                {/* Center dot on timeline line */}
+                <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 bg-[#A187FF] rounded-full shadow-lg w-4 h-4 z-20 pointer-events-none" />
+                <TimelineCard
+                  {...card}
+                  direction={isLeft ? "left" : "right"}
+                  isCenter={isCenter}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
