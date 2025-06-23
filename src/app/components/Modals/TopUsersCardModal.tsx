@@ -131,11 +131,11 @@ export default function TopUsersCardModal({ isOpen, onClose }: ModalProps) {
       <div className="relative w-full h-full">
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 z-50 text-white text-xl"
+          className="absolute top-6 right-6 z-50 text-white text-xl cursor-pointer"
         >
           ✕
         </button>
-        <section className="w-full h-full overflow-hidden bg-[#1a172e] py-10">
+        <section className="w-full h-full overflow-hidden bg-black/90 py-10">
           <div
             ref={containerRef}
             className="w-full overflow-y-scroll hide-scrollbar"
@@ -147,7 +147,7 @@ export default function TopUsersCardModal({ isOpen, onClose }: ModalProps) {
             onScroll={onScroll}
           >
             <div
-              className="flex flex-col items-center justify-start relative w-full max-w-5xl mx-auto"
+              className="flex flex-col items-center justify-start relative w-full max-w-5xl mx-auto my-10 mb-10"
               style={{ height: `${timelineData.length * 33.33}vh` }}
             >
               <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-white/10 transform -translate-x-1/2 z-10" />

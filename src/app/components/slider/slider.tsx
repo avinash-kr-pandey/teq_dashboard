@@ -13,7 +13,7 @@ type SliderItem = {
 const Slider = () => {
   const sliderItems: SliderItem[] = [
     {
-      id: 1,  
+      id: 1,
       image: "/cardimg.png",
       title: "20k Use",
       subtitle: "Monye Matt",
@@ -53,11 +53,8 @@ const Slider = () => {
   const prevSlide = () =>
     setCurrentIndex((prev) => (prev === 0 ? sliderItems.length - 1 : prev - 1));
 
-  // const cardWidth = 380;
-  // const cardHeight = 520;
-
   return (
-    <div className="relative w-full max-w-4xl mx-auto min-h-[80vh] mt-12">
+    <div className="relative w-full max-w-4xl mx-auto min-h-[90vh] p-4">
       {/* Background overlay */}
       <div className="absolute inset-0 rounded-xl bg-black/25 backdrop-blur-sm pointer-events-none"></div>
 
@@ -67,7 +64,6 @@ const Slider = () => {
           {sliderItems.map((item, index) => {
             const offset = index - currentIndex;
 
-            // Hide cards not in view
             if (Math.abs(offset) > 2) return null;
 
             let opacity = 0.5;
@@ -86,7 +82,7 @@ const Slider = () => {
               <div
                 key={item.id}
                 className={`absolute rounded-xl overflow-hidden cursor-pointer bg-[#9A72FD]
-    w-[250px] h-[350px] sm:w-[300px] sm:h-[440px] md:w-[380px] md:h-[520px]`}
+                w-[250px] h-[350px] sm:w-[300px] sm:h-[440px] md:w-[380px] md:h-[520px]`}
                 style={{
                   top: "50%",
                   left: "50%",
@@ -98,6 +94,27 @@ const Slider = () => {
                   transition: "all 0.5s ease",
                 }}
               >
+                {/* ❌ Close Icon */}
+                <button
+                  onClick={() => console.log("Close Clicked")}
+                  className="absolute top-2 right-2 z-50 text-white bg-black/50 hover:bg-black/70 p-1 rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+
                 {/* Top Blur */}
                 <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-20 backdrop-blur-sm rounded-t-xl" />
 
@@ -108,7 +125,7 @@ const Slider = () => {
                   </h3>
                 </div>
 
-                <div className="relative w-full h-full ">
+                <div className="relative w-full h-full">
                   <Image
                     src={item.image}
                     alt={item.title}
