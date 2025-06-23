@@ -155,18 +155,26 @@ const CarouselModal = ({ isOpen, onClose }: CarouselModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/40 backdrop-blur-md bg-opacity-50 px-4">
-      <div className="relative rounded-xl w-full max-w-6xl p-4 shadow-lg">
+    <div
+      className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-md bg-opacity-50 px-4"
+      style={{
+        backgroundImage: "url('/Shpare.png')",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="relative rounded-xl w-full max-w-[90vw] h-[85vh] p-6 shadow-lg bg-black/40">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-black bg-white p-2 rounded-full shadow hover:bg-gray-200 z-50"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl z-50 cursor-pointer"
           aria-label="Close"
         >
-          ✖️
+          ✖
         </button>
 
-        <div className="w-full max-w-5xl mx-auto min-h-[60vh] flex justify-center items-center relative overflow-visible">
-          <div className="absolute inset-0 bg-black/25 backdrop-blur-sm rounded-xl pointer-events-none z-0" />
+        <div className="w-full max-w-full mx-auto min-h-full flex justify-center items-center relative overflow-visible">
+          <div className="absolute inset-0 rounded-xl pointer-events-none z-0" />
 
           <div className="relative w-full h-[300px] flex justify-center items-center z-10 overflow-visible">
             {isSmallScreen ? (
